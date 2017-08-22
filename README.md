@@ -6,12 +6,12 @@ It's wrapped to the Docker container, deployed to the cloud hosting and availabl
 
 The Docker container is available at https://hub.docker.com/ as sfirsov/kalah-game
 
-![The login page](/screenshots/1.jpg)
+![The login page](/screenshots/1.png)
 
-![Creating the game](/screenshots/2.jpg)
+![Creating the game](/screenshots/2.png)
 
-![Waiting for the opponent](/screenshots/3.jpg)
+![Waiting for the opponent](/screenshots/3.png)
 
-![Joining the game](/screenshots/4.jpg)
+![Joining the game](/screenshots/4.png)
 
-![Gaming](/screenshots/5.jpg)
+![Gaming](/screenshots/5.png)
