@@ -21,4 +21,4 @@ Or join an existing game.
 And finally play the game.
 ![Gaming](/screenshots/5.png)
 
-There is a timeout for user inactivity. If the user inactive for some time of he will be removed. So if after some time AFK the game stopped working this is a feature, not a bug :)
+There is a timeout for user inactivity. If the user inactive for some time he will be removed. So if the game stopped working after some time AFK - this is a feature, not a bug :)
