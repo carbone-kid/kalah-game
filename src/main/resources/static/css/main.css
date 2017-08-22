@@ -1,0 +1,53 @@
+.enter-the-game {
+    margin-top: 30vh;
+}
+
+.pit {
+    height: 80px;
+    width: 80px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 75px;
+    border: 2px solid;
+    border-radius: 40px;
+    border-color: peru;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.kalah {
+    height: 180px;
+    width: 80px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 175px;
+    border: 2px solid;
+    border-radius: 40px;
+    border-color: peru;
+}
+
+.active-pit {
+    background-color: lightgreen;
+}
+
+.inactive-pit {
+    background-color: antiquewhite;
+}
+
+.game-text {
+    margin-top: 20vh;
+}
+
+.game-board {
+    margin-top: 25px;
+}
+
+.create-or-join {
+    margin-top: 20vh;
+}
+
+.create-game-button {
+    height: 30vh;
+    vertical-align: middle;
+    line-height: 28vh;
+}
