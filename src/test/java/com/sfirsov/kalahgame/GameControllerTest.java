@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GameControllerTest {
 
     @Autowired
@@ -46,15 +48,19 @@ public class GameControllerTest {
     public void setUp() throws Exception {
         player1 = new Player();
         player1.setName("Sergey");
+        player1.setPassword("Sergey");
 
         player2 = new Player();
         player2.setName("Gina");
+        player2.setPassword("Gina");
 
         player3 = new Player();
         player3.setName("Smith");
+        player3.setPassword("Smith");
 
         player4 = new Player();
         player4.setName("Gordon");
+        player4.setPassword("Gordon");
     }
 
     @After
@@ -71,7 +77,7 @@ public class GameControllerTest {
     }
 
     private Player login(Player player) throws Exception {
-        MvcResult result = mvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON)
+        MvcResult result = mvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(player)))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -85,7 +91,7 @@ public class GameControllerTest {
     }
 
     private Player logout(Player player) throws Exception {
-        MvcResult result = mvc.perform(post("/logout").contentType(MediaType.APPLICATION_JSON)
+        MvcResult result = mvc.perform(post("/leaveGame").contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(player)))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -116,18 +122,18 @@ public class GameControllerTest {
 
     @Test
     public void loginLogoutTest() throws Exception {
-        Assert.assertEquals(0, player1.getUid());
+        Assert.assertEquals(0, player1.getId());
 
         Player playerLoggedIn = login(player1);
-        Assert.assertNotEquals(0, playerLoggedIn.getUid());
+        Assert.assertNotEquals(0, playerLoggedIn.getId());
 
         // Trying to login with the same name
         playerLoggedIn = login(player1);
-        Assert.assertEquals(-1, playerLoggedIn.getUid());
+        Assert.assertEquals(-1, playerLoggedIn.getId());
 
         // Trying to logout
         Player playerLoggedOut = logout(playerLoggedIn);
-        Assert.assertEquals(-1, playerLoggedOut.getUid());
+        Assert.assertEquals(-1, playerLoggedOut.getId());
     }
 
     @Test
@@ -152,7 +158,7 @@ public class GameControllerTest {
         Player playerLoggedIn2 = login(player2);
 
         JoinGameRequest joinGameRequest = new JoinGameRequest();
-        joinGameRequest.setPlayerUid(playerLoggedIn2.getUid());
+        joinGameRequest.setPlayerUid(playerLoggedIn2.getId());
         joinGameRequest.setOpponentName(player1.getName());
         GameState gameState = joinGame(joinGameRequest);
 
@@ -169,12 +175,12 @@ public class GameControllerTest {
 
         Player playerLoggedIn2 = login(player2);
         JoinGameRequest joinGameRequest = new JoinGameRequest();
-        joinGameRequest.setPlayerUid(playerLoggedIn2.getUid());
+        joinGameRequest.setPlayerUid(playerLoggedIn2.getId());
         joinGameRequest.setOpponentName(player1.getName());
         joinGame(joinGameRequest);
 
         MoveRequest moveRequest = new MoveRequest();
-        moveRequest.setPlayerUid(playerLoggedIn1.getUid());
+        moveRequest.setPlayerUid(playerLoggedIn1.getId());
         moveRequest.setPit(3);
         MvcResult result = mvc.perform(post("/move").contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(moveRequest)))

@@ -17,17 +17,19 @@ public class GameController {
     @Autowired
     Engine engine;
 
+    @RequestMapping(method = RequestMethod.POST, value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Player register(@RequestBody Player player) {
+        return engine.addPlayer(player);
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public Player login(@RequestBody Player player) {
-        int uid = engine.addPlayer(player.getName());
-        player.setUid(uid);
-
-        return player;
+        return engine.login(player);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/createGame", produces = MediaType.APPLICATION_JSON_VALUE)
     public GameState createGame(@RequestBody Player player) {
-        return engine.addGame(player.getUid());
+        return engine.addGame(player.getId());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/joinGame", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,16 +44,12 @@ public class GameController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/getGameState", produces = MediaType.APPLICATION_JSON_VALUE)
     public GameState getGameState(@RequestBody Player player) {
-        return engine.getGameState(player.getUid());
+        return engine.getGameState(player.getId());
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Player logout(@RequestBody Player player) {
-        if(engine.deletePlayer(player.getUid())) {
-            player.setName("");
-            player.setUid(-1);
-        }
-
+    @RequestMapping(method = RequestMethod.POST, value = "/leaveGame", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Player leaveGame(@RequestBody Player player) {
+        engine.leaveGame(player);
         return player;
     }
 

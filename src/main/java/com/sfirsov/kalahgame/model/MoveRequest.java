@@ -1,15 +1,15 @@
 package com.sfirsov.kalahgame.model;
 
 public class MoveRequest {
-    private int playerUid;
+    private long playerId;
     private int pit;
 
-    public int getPlayerUid() {
-        return playerUid;
+    public long getPlayerUid() {
+        return playerId;
     }
 
-    public void setPlayerUid(int playerUid) {
-        this.playerUid = playerUid;
+    public void setPlayerUid(long playerUid) {
+        this.playerId = playerUid;
     }
 
     public int getPit() {

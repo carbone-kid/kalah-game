@@ -1,14 +1,14 @@
 package com.sfirsov.kalahgame.model;
 
 public class JoinGameRequest {
-    int playerUid;
+    long playerUid;
     String opponentName;
 
-    public int getPlayerUid() {
+    public long getPlayerUid() {
         return playerUid;
     }
 
-    public void setPlayerUid(int playerUid) {
+    public void setPlayerUid(long playerUid) {
         this.playerUid = playerUid;
     }
 

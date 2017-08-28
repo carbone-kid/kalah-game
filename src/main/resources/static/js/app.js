@@ -2,10 +2,6 @@ angular.module('angApp', []).controller('MainController', function($scope, $http
 
     $scope.initData = function () {
         $scope.data = {};
-        $scope.data.player = {
-            uid: '-1',
-            name: ''
-        };
         $scope.data.availableGames = [];
         $scope.data.joinGameRequest = {
             playerUid: -1,
@@ -34,8 +30,24 @@ angular.module('angApp', []).controller('MainController', function($scope, $http
         $scope.data.errorMessage = "";
     };
 
+    $scope.initPlayerData = function () {
+        $scope.data.player = {
+            id: '-1',
+            password: '',
+            name: ''
+        };
+    };
+
+    var setErrorMessage = function (errorMessage) {
+        $scope.data.errorMessage = errorMessage;
+
+        setTimeout(function () {
+            $scope.data.errorMessage = "";
+        }, 5000);
+    };
+
     var errorHandler = function(response) {
-        $scope.data.errorMessage = response.data;
+        setErrorMessage(response.data);
     };
 
     $scope.loginIfEnterPressed = function ($event) {
@@ -49,13 +61,27 @@ angular.module('angApp', []).controller('MainController', function($scope, $http
         $http.post('/login', $scope.data.player).
         then(function(response) {
             $scope.data.player = response.data;
+            if ($scope.data.player.id == -1) {
+                setErrorMessage("The player doesn't exist. Please register first.");
+            }
+        }, errorHandler);
+    };
+
+    $scope.register = function () {
+        $http.post('/register', $scope.data.player).
+        then(function(response) {
+            $scope.data.player = response.data;
+            if ($scope.data.player.id == -1) {
+                setErrorMessage("The player is already exist.");
+            }
         }, errorHandler);
     };
 
     $scope.logout = function () {
-        $http.post('/logout', $scope.data.player).
+        $http.post('/leaveGame', $scope.data.player).
         then(function(response) {
             $scope.initData();
+            $scope.data.player = response.data;
         }, errorHandler);
     };
 
@@ -75,7 +101,7 @@ angular.module('angApp', []).controller('MainController', function($scope, $http
     };
 
     $scope.joinGame = function (opponentName) {
-        $scope.data.joinGameRequest.playerUid = $scope.data.player.uid;
+        $scope.data.joinGameRequest.playerUid = $scope.data.player.id;
         $scope.data.joinGameRequest.opponentName = opponentName;
 
         $http.post('/joinGame', $scope.data.joinGameRequest).
@@ -85,29 +111,28 @@ angular.module('angApp', []).controller('MainController', function($scope, $http
         }, errorHandler);
     };
 
+    var receiveGameState = function(response) {
+        if(response.data == "") {
+            setErrorMessage("It looks like the game session was closed.");
+        }
+        else if($scope.isPitsDifferent($scope.data.game.gameState.pits, response.data.pits)) {
+            $scope.playPutToPit();
+        }
+
+        $scope.data.game.gameState = response.data;
+    };
+
     $scope.move = function (pit) {
         $scope.data.game.moveRequest.pit = pit;
-        $scope.data.game.moveRequest.playerUid = $scope.data.player.uid;
+        $scope.data.game.moveRequest.playerUid = $scope.data.player.id;
 
         $http.post('/move', $scope.data.game.moveRequest).
-        then(function(response) {
-            if($scope.isPitsDifferent($scope.data.game.gameState.pits, response.data.pits)) {
-                $scope.playPutToPit();
-            }
-
-            $scope.data.game.gameState = response.data;
-        }, errorHandler);
+        then(receiveGameState, errorHandler);
     };
 
     $scope.getGameState = function () {
         $http.post('/getGameState', $scope.data.player).
-        then(function(response) {
-            if($scope.isPitsDifferent($scope.data.game.gameState.pits, response.data.pits)) {
-                $scope.playPutToPit();
-            }
-
-            $scope.data.game.gameState = response.data;
-        }, errorHandler);
+        then(receiveGameState, errorHandler);
     };
 
     $scope.isPitsDifferent = function(pitsOld, pitsNew) {
@@ -148,6 +173,7 @@ angular.module('angApp', []).controller('MainController', function($scope, $http
 
     var init = function () {
         $scope.initData();
+        $scope.initPlayerData();
 
         setInterval(function(){
             if(!$scope.data.game.created && !$scope.data.game.joined) {
