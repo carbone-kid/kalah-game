@@ -6,7 +6,7 @@ It's wrapped to the Docker container, deployed to the cloud hosting and availabl
 
 The Docker container is available at https://hub.docker.com/ as sfirsov/kalah-game
 
-As the game is multiplayer you first need to login with unique name.
+As the game is multiplayer you first need to register with unique name or enter with the existing credentials.
 ![The login page](/screenshots/1.png)
 
 Then you need to create a game...
@@ -15,10 +15,10 @@ Then you need to create a game...
 ... and waiting for the opponent.
 ![Waiting for the opponent](/screenshots/3.png)
 
-Or join an existing game.
+Or join the existing game.
 ![Joining the game](/screenshots/4.png)
 
 And finally play the game.
 ![Gaming](/screenshots/5.png)
 
-There is a timeout for user inactivity. If the user inactive for some time he will be removed. So if the game stopped working after some time AFK - this is a feature, not a bug :)
+There is a timeout for games inactivity. If there is no activity in the game for 10 minutes the game will be removed.
