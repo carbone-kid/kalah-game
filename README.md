@@ -2,7 +2,7 @@
 
 It's made as a Spring Boot application using Spring MVC on the backend and AngularJS on the frontend.
 
-It's wrapped to the Docker container, deployed to the cloud hosting and available here http://82.196.0.94/
+It's wrapped to the Docker container, deployed to the cloud hosting and available here http://188.226.169.79:8081/
 
 The Docker container is available at https://hub.docker.com/ as sfirsov/kalah-game
 
